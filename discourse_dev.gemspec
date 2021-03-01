@@ -1,0 +1,24 @@
+# frozen_string_literal: true
+
+lib = File.expand_path("../lib", __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require "discourse_dev/version"
+
+Gem::Specification.new do |spec|
+  spec.name          = "discourse_dev"
+  spec.version       = DiscourseDev::VERSION
+  spec.authors       = ["Vinoth Kannan"]
+  spec.email         = ["svkn.87@gmail.com"]
+
+  spec.summary       = %q{Rake helper for Discourse developers}
+  spec.description   = %q{Rake helper for Discourse developers}
+  spec.homepage      = "https://github.com/discourse/discourse_dev"
+  spec.license       = "MIT"
+
+  spec.require_paths = ["lib"]
+
+  spec.add_development_dependency "bundler", "~> 2.0"
+  spec.add_development_dependency "rake", "~> 10.0"
+
+  spec.required_ruby_version = '>= 2.6.0'
+end
