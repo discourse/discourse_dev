@@ -1,0 +1,21 @@
+en:
+  faker:
+    category:
+      name:
+        - movies
+        - tech
+        - general
+        - videos
+        - gaming
+        - sports
+        - school
+        - pics
+        - music
+        - pets
+        - design
+        - dev
+        - support
+        - ux
+        - announcements
+        - bug
+        - community
