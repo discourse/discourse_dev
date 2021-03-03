@@ -24,6 +24,7 @@ module DiscourseDev
     def populate!
       puts "Creating #{count} sample #{type.downcase}s"
       count.times { create! }
+      puts
     end
 
     def count
