@@ -4,21 +4,28 @@ require 'discourse_dev'
 require 'rails'
 require 'faker'
 
-class DiscourseDev::User
+module DiscourseDev
+  class User < Record
 
-  def self.create!
-    name = Faker::Name.name
-    username = Faker::Internet.username(specifier: name)
-    username_lower: username.downcase
-    ::User.create!(
-      name: name,
-      username: username,
-      username_lower: username_lower,
-      trust_level: Faker::Number.between(from: 1, to: 4)
-    )
-  end
+    def initialize
+      super(::User)
+    end
 
-  def self.populate!
-    30.times { create! }
+    def create!
+      name = Faker::Name.name
+      email = Faker::Internet.email(name: name)
+      username = Faker::Internet.username(specifier: name)
+      username_lower = username.downcase
+
+      ::User.create!(
+        name: name,
+        email: email,
+        username: username,
+        username_lower: username_lower,
+        trust_level: Faker::Number.between(from: 1, to: 4)
+      )
+
+      super
+    end
   end
 end
