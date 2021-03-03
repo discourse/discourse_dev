@@ -31,6 +31,6 @@ jobs:
         OWNER: ${{ github.repository_owner }}
 
     - name: Release Gem
-      uses: CvX/publish-rubygems-action@master
+      uses: CvX/publish-rubygems-action@main
       env:
         RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
