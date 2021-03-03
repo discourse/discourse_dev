@@ -1,7 +1,7 @@
 en:
   faker:
-    category:
-      name:
+    discourse:
+      categories:
         - movies
         - tech
         - general

@@ -5,7 +5,7 @@ module Faker
     class << self
 
       def category
-        fetch('artist.names')
+        fetch('discourse.categories')
       end
     end
   end
