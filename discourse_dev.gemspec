@@ -15,10 +15,13 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/discourse/discourse_dev"
   spec.license       = "MIT"
 
+  spec.files         = `git ls-files`.split($/).reject { |s| s =~ /^(spec)/ }
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
+
+  spec.add_development_dependency "faker", "~> 2.16"
 
   spec.required_ruby_version = '>= 2.6.0'
 end
