@@ -17,9 +17,21 @@ module DiscourseDev
         title: Faker::Lorem.sentence(word_count: 3, supplemental: true, random_words_to_add: 4).chomp(".")[0, SiteSetting.max_topic_title_length],
         raw: Faker::Markdown.sandwich(sentences: 5),
         category: @category_ids.sample,
+        tags: tags,
         topic_opts: { custom_fields: { dev_sample: true } },
         skip_validations: true
       }
+    end
+
+    def tags
+      @tags = []
+      keys = ["model", "make", "manufacture"]
+
+      Faker::Number.between(from: 0, to: 3).times do |index|
+        @tags << Faker::Vehicle.send(keys[index])
+      end
+
+      @tags
     end
 
     def create!
