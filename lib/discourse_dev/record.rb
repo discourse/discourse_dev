@@ -17,7 +17,8 @@ module DiscourseDev
     end
 
     def create!
-      model.create!(data)
+      record = model.create!(data)
+      yield(record)
       putc "."
     end
 

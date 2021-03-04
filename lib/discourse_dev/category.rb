@@ -44,13 +44,12 @@ module DiscourseDev
     end
 
     def create!
-      category = ::Category.new(data)
-      category.set_permissions(permissions)
-      category.save!
+      super do |category|
+        category.set_permissions(permissions)
+        category.save!
 
-      @parent_category_ids << category.id if category.parent_category_id.blank?
-
-      putc "."
+        @parent_category_ids << category.id if category.parent_category_id.blank?
+      end
     end
   end
 end
