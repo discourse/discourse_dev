@@ -25,11 +25,20 @@ module DiscourseDev
 
       {
         name: name,
-        allow_membership_requests: Faker::Boolean.boolean,
         public_exit: Faker::Boolean.boolean,
         public_admission: Faker::Boolean.boolean,
         primary_group: Faker::Boolean.boolean
       }
+    end
+
+    def create!
+      super do |group|
+        if Faker::Boolean.boolean
+          group.add_owner(::Discourse.system_user)
+          group.allow_membership_requests = true
+          group.save!
+        end
+      end
     end
   end
 end

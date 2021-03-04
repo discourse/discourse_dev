@@ -11,8 +11,14 @@ task 'dev:reset' => ['db:load_config'] do |_, args|
   check_environment!
 
   Rake::Task['db:migrate:reset'].invoke
+  Rake::Task['dev:config'].invoke
   Rake::Task['admin:create'].invoke
   Rake::Task['dev:populate'].invoke
+end
+
+desc 'Initialize development environment'
+task 'dev:config' => ['db:load_config'] do |_, args|
+  DiscourseDev::Config.new.update!
 end
 
 desc 'Populate sample content for development environment'

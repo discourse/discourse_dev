@@ -8,7 +8,7 @@ module DiscourseDev
   class Record
     DEFAULT_COUNT = 30.freeze
 
-    attr_reader :model, :type
+    attr_reader :model, :type, :count
 
     def initialize(model, count = DEFAULT_COUNT)
       @model = model
@@ -23,13 +23,9 @@ module DiscourseDev
     end
 
     def populate!
-      puts "Creating #{count} sample #{type.downcase}s"
+      puts "Creating #{count} sample #{type.downcase} records"
       count.times { create! }
       puts
-    end
-
-    def count
-      @count || DEFAULT_COUNT
     end
 
     def self.populate!

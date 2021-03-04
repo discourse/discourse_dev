@@ -11,6 +11,7 @@ module DiscourseDev
       super(::Category, count)
       @existing_names = ::Category.pluck(:name)
       @parent_category_ids = ::Category.where(parent_category_id: nil).pluck(:id)
+      @group_count = ::Group.count
     end
 
     def data
@@ -40,7 +41,15 @@ module DiscourseDev
     end
 
     def permissions
-      @permissions || { everyone: :full }
+      return @permissions if @permissions.present?
+      return { everyone: :full } if Faker::Boolean.boolean(true_ratio: 0.75)
+        
+      permission = {}
+      offset = rand(@group_count)
+      group = ::Group.offset(offset).first
+      permission[group.id] = Faker::Number.between(from: 1, to: 3)
+
+      permission
     end
 
     def create!
