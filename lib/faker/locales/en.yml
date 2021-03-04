@@ -53,3 +53,12 @@ en:
         - Politics
         - Roadmap
         - Share Tips and Tricks
+      groups:
+        - team
+        - designers
+        - authors
+        - contributors
+        - customers
+        - subscribers
+        - creators
+        - translators

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+desc 'Creates sample categories'
+task 'groups:populate' => ['db:load_config'] do |_, args|
+  DiscourseDev::Group.populate!
+end
+
 desc 'Creates sample user accounts'
 task 'users:populate' => ['db:load_config'] do |_, args|
   DiscourseDev::User.populate!
