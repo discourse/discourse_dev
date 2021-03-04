@@ -16,7 +16,7 @@ module DiscourseDev
       {
         title: Faker::Lorem.sentence(word_count: 3, supplemental: true, random_words_to_add: 4).chomp(".")[0, SiteSetting.max_topic_title_length],
         raw: Faker::Markdown.sandwich(sentences: 5),
-        category_id: @category_ids.sample,
+        category: @category_ids.sample,
         topic_opts: { custom_fields: { dev_sample: true } },
         skip_validations: true
       }

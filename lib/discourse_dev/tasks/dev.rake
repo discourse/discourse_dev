@@ -18,5 +18,6 @@ end
 desc 'Populate sample content for development environment'
 task 'dev:populate' => ['db:load_config'] do |_, args|
   Rake::Task['users:populate'].invoke
+  Rake::Task['categories:populate'].invoke
   Rake::Task['topics:populate'].invoke
 end
