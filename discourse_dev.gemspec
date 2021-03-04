@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Vinoth Kannan"]
   spec.email         = ["svkn.87@gmail.com"]
 
-  spec.summary       = %q{Rake helper for Discourse developers}
-  spec.description   = %q{Rake helper for Discourse developers}
+  spec.summary       = %q{Rake helper tasks for Discourse developers}
+  spec.description   = %q{Rake helper tasks for Discourse developers}
   spec.homepage      = "https://github.com/discourse/discourse_dev"
   spec.license       = "MIT"
 
@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "faker", "~> 2.16"
 
   spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", ">= 12.3.3"
 
   spec.required_ruby_version = '>= 2.6.0'
 end
