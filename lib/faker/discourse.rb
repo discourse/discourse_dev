@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'faker'
+
 module Faker
   class Discourse < Base
     class << self
