@@ -14,7 +14,7 @@ module DiscourseDev
 
     def data
       {
-        title: Faker::Lorem.sentence(word_count: 3, supplemental: true, random_words_to_add: 4).chomp(".")[0, SiteSetting.max_topic_title_length],
+        title: title[0, SiteSetting.max_topic_title_length],
         raw: Faker::Markdown.sandwich(sentences: 5),
         category: @category_ids.sample,
         tags: tags,
@@ -23,15 +23,22 @@ module DiscourseDev
       }
     end
 
+    def title
+      if index <= I18n.t("faker.discourse.topics").count
+        Faker::Discourse.unique.topic
+      else
+        Faker::Lorem.unique.sentence(word_count: 3, supplemental: true, random_words_to_add: 4).chomp(".")
+      end
+    end
+
     def tags
       @tags = []
-      keys = ["model", "make", "manufacture"]
 
-      Faker::Number.between(from: 0, to: 3).times do |index|
-        @tags << Faker::Vehicle.send(keys[index])
+      Faker::Number.between(from: 0, to: 3).times do
+        @tags << Faker::Discourse.tag
       end
 
-      @tags
+      @tags.uniq
     end
 
     def create!

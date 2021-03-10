@@ -15,6 +15,11 @@ task 'categories:populate' => ['db:load_config'] do |_, args|
   DiscourseDev::Category.populate!
 end
 
+desc 'Creates sample tags'
+task 'tags:populate' => ['db:load_config'] do |_, args|
+  DiscourseDev::Tag.populate!
+end
+
 desc 'Creates sample topics'
 task 'topics:populate' => ['db:load_config'] do |_, args|
   DiscourseDev::Topic.populate!

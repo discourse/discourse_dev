@@ -11,9 +11,11 @@ module DiscourseDev
     attr_reader :model, :type, :count
 
     def initialize(model, count = DEFAULT_COUNT)
+      Faker::Config.random = Random.new(1)
       @model = model
       @type = model.to_s
       @count = count
+      @index = nil
     end
 
     def create!
@@ -24,12 +26,19 @@ module DiscourseDev
 
     def populate!
       puts "Creating #{count} sample #{type.downcase} records"
-      count.times { create! }
+      count.times do |i|
+        @index = i
+        create!
+      end
       puts
     end
 
     def self.populate!
       self.new.populate!
+    end
+
+    def index
+      @index
     end
   end
 end
