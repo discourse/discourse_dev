@@ -8,15 +8,15 @@ module DiscourseDev
 
     def initialize(count = DEFAULT_COUNT)
       super(::Topic, count)
-      @category_ids = ::Category.pluck(:id)
-      @user_count = ::User.count
     end
 
     def data
+      @category = Category.random
+
       {
         title: title[0, SiteSetting.max_topic_title_length],
         raw: Faker::Markdown.sandwich(sentences: 5),
-        category: @category_ids.sample,
+        category: @category.id,
         tags: tags,
         topic_opts: { custom_fields: { dev_sample: true } },
         skip_validations: true
@@ -42,11 +42,17 @@ module DiscourseDev
     end
 
     def create!
-      offset = rand(@user_count)
-      user = ::User.offset(offset).first
+      if @category.groups.present?
+        group_ids = @category.groups.pluck(:id)
+        user_ids = ::GroupUser.where(group_id: group_ids).pluck(:user_id)
+        user_count = user_ids.count
+        offset = Faker::Number.between(from: 0, to: user_count - 1)
+        user = ::User.find user_ids.offset(offset).first
+      else
+        user = User.random
+      end
 
       PostCreator.new(user, data).create!
-      putc "."
     end
   end
 end

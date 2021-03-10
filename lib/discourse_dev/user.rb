@@ -33,8 +33,7 @@ module DiscourseDev
       super do |user|
         user.activate
         Faker::Number.between(from: 0, to: 2).times do
-          offset = rand(@group_count)
-          group = @groups.offset(offset).first
+          group = Group.random
     
           group.add(user)
         end

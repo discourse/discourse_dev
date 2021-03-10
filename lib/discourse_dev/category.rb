@@ -45,8 +45,7 @@ module DiscourseDev
       return { everyone: :full } if Faker::Boolean.boolean(true_ratio: 0.75)
         
       permission = {}
-      offset = rand(@group_count)
-      group = ::Group.offset(offset).first
+      group = Group.random
       permission[group.id] = Faker::Number.between(from: 1, to: 3)
 
       permission
