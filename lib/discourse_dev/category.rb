@@ -9,23 +9,16 @@ module DiscourseDev
 
     def initialize(count = DEFAULT_COUNT)
       super(::Category, count)
-      @existing_names = ::Category.pluck(:name)
       @parent_category_ids = ::Category.where(parent_category_id: nil).pluck(:id)
-      @group_count = ::Group.count
     end
 
     def data
-      name = Faker::Discourse.category
+      name = Faker::Discourse.unique.category
       parent_category_id = nil
 
-      while @existing_names.include? name
-        name = Faker::Discourse.category
-      end
-
-      @existing_names << name
-
       if Faker::Boolean.boolean(true_ratio: 0.6)
-        parent_category_id = @parent_category_ids.sample
+        offset = Faker::Number.between(from: 0, to: @parent_category_ids.count - 1)
+        parent_category_id = @parent_category_ids[offset]
         @permissions = ::Category.find(parent_category_id).permissions_params.presence
       else
         @permissions = nil

@@ -9,8 +9,6 @@ module DiscourseDev
 
     def initialize(count = DEFAULT_COUNT)
       super(::User, count)
-      @groups = ::Group.where(automatic: false)
-      @group_count = @groups.count
     end
 
     def data

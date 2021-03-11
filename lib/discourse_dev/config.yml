@@ -1,3 +1,4 @@
 site_settings:
   tagging_enabled: true
   verbose_discourse_connect_logging: true
+seed: 1

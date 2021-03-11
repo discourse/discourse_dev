@@ -12,7 +12,6 @@ task 'dev:reset' => ['db:load_config'] do |_, args|
 
   Rake::Task['db:migrate:reset'].invoke
   Rake::Task['dev:config'].invoke
-  Rake::Task['admin:create'].invoke
   Rake::Task['dev:populate'].invoke
 end
 
@@ -23,7 +22,6 @@ end
 
 desc 'Populate sample content for development environment'
 task 'dev:populate' => ['db:load_config'] do |_, args|
-  DiscourseDev.set_seed
   Rake::Task['groups:populate'].invoke
   Rake::Task['users:populate'].invoke
   Rake::Task['categories:populate'].invoke

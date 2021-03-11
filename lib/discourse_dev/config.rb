@@ -19,6 +19,8 @@ module DiscourseDev
 
     def update!
       update_site_settings
+      create_admin_user
+      set_seed
     end
 
     def update_site_settings
@@ -41,6 +43,35 @@ module DiscourseDev
       end
 
       SiteSetting.refresh!
+    end
+
+    def create_admin_user
+      puts "Creating default admin user account..."
+
+      settings = config["admin"]
+
+      if settings.present?
+        email = settings["email"]
+
+        admin = ::User.create!(
+          email: email,
+          username: settings["username"] || UserNameSuggester.suggest(email),
+          password: settings["password"]
+        )
+        admin.grant_admin!
+        if admin.trust_level < 1
+          admin.change_trust_level!(1)
+        end
+        admin.email_tokens.update_all confirmed: true
+        admin.activate
+      else
+        Rake::Task['admin:create'].invoke
+      end
+    end
+
+    def set_seed
+      seed = config["seed"] || default_config["seed"] || 1
+      Faker::Config.random = Random.new(seed)
     end
   end
 end

@@ -11,20 +11,11 @@ module DiscourseDev
 
     def initialize(count = DEFAULT_COUNT)
       super(::Group, count)
-      @existing_names = ::Group.where(automatic: false).pluck(:name)
     end
 
     def data
-      name = Faker::Discourse.group
-
-      while @existing_names.include? name
-        name = Faker::Company.profession.gsub(" ", "-")
-      end
-
-      @existing_names << name
-
       {
-        name: name,
+        name: Faker::Discourse.unique.group,
         public_exit: Faker::Boolean.boolean,
         public_admission: Faker::Boolean.boolean,
         primary_group: Faker::Boolean.boolean
