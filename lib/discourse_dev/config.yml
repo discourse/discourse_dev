@@ -1,3 +1,3 @@
 site_settings:
-  tagging_enabled: false
+  tagging_enabled: true
   verbose_discourse_connect_logging: true

@@ -11,7 +11,6 @@ module DiscourseDev
     attr_reader :model, :type
 
     def initialize(model, count = DEFAULT_COUNT)
-      Faker::Config.random = Random.new(1)
       @model = model
       @type = model.to_s
       @count = count
@@ -32,7 +31,6 @@ module DiscourseDev
         putc "."
       end
 
-      @total_count = model.count
       puts
     end
 
@@ -40,14 +38,13 @@ module DiscourseDev
       @index
     end
 
-    def random
-      @total_count ||= model.count
-      offset = Faker::Number.between(from: 0, to: @total_count - 1)
-      model.offset(offset).first
-    end
-
     def self.populate!
       self.new.populate!
+    end
+
+    def self.random(model)
+      offset = Faker::Number.between(from: 0, to: model.count - 1)
+      model.offset(offset).first
     end
   end
 end

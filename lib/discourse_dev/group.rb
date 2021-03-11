@@ -40,5 +40,9 @@ module DiscourseDev
         end
       end
     end
+
+    def self.random
+      super(::Group)
+    end
   end
 end

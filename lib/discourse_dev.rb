@@ -9,4 +9,9 @@ I18n.reload! if I18n.backend.initialized?
 
 module DiscourseDev
   require 'discourse_dev/railtie' if defined?(Rails)
+
+  def self.set_seed
+    seed = ENV["SEED"] || 1
+    Faker::Config.random = Random.new(seed)
+  end
 end

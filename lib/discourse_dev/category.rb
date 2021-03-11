@@ -59,5 +59,9 @@ module DiscourseDev
         @parent_category_ids << category.id if category.parent_category_id.blank?
       end
     end
+
+    def self.random
+      super(::Category)
+    end
   end
 end

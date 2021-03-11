@@ -14,9 +14,9 @@ module DiscourseDev
     end
 
     def data
-      name = Faker::Name.name
-      email = Faker::Internet.email(name: name)
-      username = Faker::Internet.username(specifier: name)[0, SiteSetting.max_username_length]
+      name = Faker::Name.unique.name
+      email = Faker::Internet.unique.email(name: name)
+      username = Faker::Internet.unique.username(specifier: name)[0, SiteSetting.max_username_length]
       username_lower = username.downcase
 
       {
@@ -38,6 +38,10 @@ module DiscourseDev
           group.add(user)
         end
       end
+    end
+
+    def self.random
+      super(::User)
     end
   end
 end

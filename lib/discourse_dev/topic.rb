@@ -11,8 +11,6 @@ module DiscourseDev
     end
 
     def data
-      @category = Category.random
-
       {
         title: title[0, SiteSetting.max_topic_title_length],
         raw: Faker::Markdown.sandwich(sentences: 5),
@@ -42,17 +40,18 @@ module DiscourseDev
     end
 
     def create!
-      if @category.groups.present?
-        group_ids = @category.groups.pluck(:id)
-        user_ids = ::GroupUser.where(group_id: group_ids).pluck(:user_id)
-        user_count = user_ids.count
-        offset = Faker::Number.between(from: 0, to: user_count - 1)
-        user = ::User.find user_ids.offset(offset).first
-      else
-        user = User.random
-      end
-
+      @category = Category.random
       PostCreator.new(user, data).create!
+    end
+
+    def user
+      return User.random if @category.groups.blank?
+      
+      group_ids = @category.groups.pluck(:id)
+      user_ids = ::GroupUser.where(group_id: group_ids).pluck(:user_id)
+      user_count = user_ids.count
+      position = Faker::Number.between(from: 0, to: user_count - 1)
+      ::User.find(user_ids[position] || Discourse::SYSTEM_USER_ID)
     end
   end
 end
