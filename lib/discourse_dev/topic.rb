@@ -53,5 +53,10 @@ module DiscourseDev
       position = Faker::Number.between(from: 0, to: user_count - 1)
       ::User.find(user_ids[position] || Discourse::SYSTEM_USER_ID)
     end
+
+    def current_count
+      category_definition_topic_ids = ::Category.pluck(:topic_id)
+      ::Topic.where(archetype: :regular).where.not(id: category_definition_topic_ids).count
+    end
   end
 end

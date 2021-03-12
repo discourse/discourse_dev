@@ -28,3 +28,16 @@ task 'dev:populate' => ['db:load_config'] do |_, args|
   Rake::Task['tags:populate'].invoke
   Rake::Task['topics:populate'].invoke
 end
+
+desc 'Repopulate sample datas in development environment'
+task 'dev:repopulate' => ['db:load_config'] do |_, args|
+  require 'highline/import'
+
+  answer = ask("Do you want to repopulate the database with fresh data? It will recreate DBs and run migration from scratch before generating all the samples. (Y/n)  ")
+
+  if (answer == "" || answer.downcase == 'y')
+    Rake::Task['dev:reset'].invoke
+  else
+    puts "You can run `dev:reset` rake task to do this repopulate action anytime."
+  end
+end
