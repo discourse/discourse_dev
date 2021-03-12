@@ -41,7 +41,9 @@ module DiscourseDev
 
     def create!
       @category = Category.random
-      PostCreator.new(user, data).create!
+      post = PostCreator.new(user, data).create!
+
+      Post.new(post.topic, Faker::Number.between(from: 0, to: 5)).populate!
     end
 
     def user
