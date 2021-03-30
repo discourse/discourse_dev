@@ -41,14 +41,21 @@ module DiscourseDev
 
     def create!
       @category = Category.random
-      post = PostCreator.new(user, data).create!
+      topic = data
+      post = PostCreator.new(user, topic).create!
 
-      Post.new(post.topic, Faker::Number.between(from: 0, to: 5)).populate!
+      if topic[:title] == "Coolest thing you have seen today"
+        reply_count = 99
+      else
+        reply_count = Faker::Number.between(from: 0, to: 12)
+      end
+
+      Post.new(post.topic, reply_count).populate!
     end
 
     def user
       return User.random if @category.groups.blank?
-      
+
       group_ids = @category.groups.pluck(:id)
       user_ids = ::GroupUser.where(group_id: group_ids).pluck(:user_id)
       user_count = user_ids.count

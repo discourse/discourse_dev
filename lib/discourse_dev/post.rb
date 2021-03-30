@@ -29,13 +29,17 @@ module DiscourseDev
     end
 
     def create!
-      PostCreator.new(user, data).create!
+      begin
+        PostCreator.new(user, data).create!
+      rescue ActiveRecord::RecordNotSaved => e
+        puts e
+      end
     end
 
     def user
       return User.random if topic.category.groups.blank?
       return Discourse.system_user if @user_ids.blank?
-      
+
       position = Faker::Number.between(from: 0, to: @user_count - 1)
       ::User.find(@user_ids[position])
     end
