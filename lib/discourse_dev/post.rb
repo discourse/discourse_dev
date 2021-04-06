@@ -50,5 +50,39 @@ module DiscourseDev
         create!
       end
     end
+
+    def self.add_replies!(args)
+      if !args[:topic_id]
+        puts "Topic ID is required. Aborting."
+        return
+      end
+
+      if !::Topic.find_by_id(args[:topic_id])
+        puts "Topic ID does not match topic in DB, aborting."
+        return
+      end
+
+      topic = ::Topic.find_by_id(args[:topic_id])
+      count = args[:count] ? args[:count].to_i : 50
+
+      puts "Creating #{count} replies in '#{topic.title}'"
+
+      count.times do |i|
+        @index = i
+        begin
+          reply = {
+            topic_id: topic.id,
+            raw: Faker::Markdown.sandwich(sentences: 5),
+            skip_validations: true
+          }
+          PostCreator.new(User.random, reply).create!
+        rescue ActiveRecord::RecordNotSaved => e
+          puts e
+        end
+      end
+
+      puts "Done!"
+    end
+
   end
 end
