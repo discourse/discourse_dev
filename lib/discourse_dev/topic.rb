@@ -11,12 +11,34 @@ module DiscourseDev
     end
 
     def data
+      max_views = 0
+
+      case Faker::Number.between(from: 0, to: 5)
+      when 0
+        max_views = 10
+      when 1
+        max_views = 100
+      when 2
+        max_views = SiteSetting.topic_views_heat_low
+      when 3
+        max_views = SiteSetting.topic_views_heat_medium
+      when 4
+        max_views = SiteSetting.topic_views_heat_high
+      when 5
+        max_views = SiteSetting.topic_views_heat_high + SiteSetting.topic_views_heat_medium
+      end
+
       {
         title: title[0, SiteSetting.max_topic_title_length],
         raw: Faker::Markdown.sandwich(sentences: 5),
         category: @category.id,
+        created_at: Faker::Time.between(from: DiscourseDev.config.start_date, to: DateTime.now),
         tags: tags,
-        topic_opts: { custom_fields: { dev_sample: true } },
+        topic_opts: {
+          import_mode: true,
+          views: Faker::Number.between(from: 1, to: max_views),
+          custom_fields: { dev_sample: true }
+        },
         skip_validations: true
       }
     end

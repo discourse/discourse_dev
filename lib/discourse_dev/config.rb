@@ -70,8 +70,17 @@ module DiscourseDev
     end
 
     def set_seed
-      seed = config["seed"] || default_config["seed"] || 1
+      seed = self.seed || 1
       Faker::Config.random = Random.new(seed)
+    end
+
+    def start_date
+      DateTime.parse(config["start_date"] || default_config["start_date"])
+    end
+
+    def method_missing(name)
+      name = name.to_s
+      config[name] || default_config[name]
     end
   end
 end
