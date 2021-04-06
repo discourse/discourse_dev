@@ -24,3 +24,8 @@ desc 'Creates sample topics'
 task 'topics:populate' => ['db:load_config'] do |_, args|
   DiscourseDev::Topic.populate!
 end
+
+desc 'Add replies to a topic'
+task 'replies:populate', [:topic_id, :count] => ['db:load_config'] do |_, args|
+  DiscourseDev::Post.add_replies!(args)
+end
