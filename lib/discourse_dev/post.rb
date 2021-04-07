@@ -27,7 +27,8 @@ module DiscourseDev
         topic_id: topic.id,
         raw: Faker::Markdown.sandwich(sentences: 5),
         created_at: Faker::Time.between(from: topic.last_posted_at, to: DateTime.now),
-        skip_validations: true
+        skip_validations: true,
+        skip_guardian: true
       }
     end
 
@@ -44,7 +45,7 @@ module DiscourseDev
         user = self.user
         next if user_ids.include?(user.id)
 
-        PostActionCreator.new(user, post, PostActionType.types[:like]).perform
+        PostActionCreator.new(user, post, PostActionType.types[:like], created_at: Faker::Time.between(from: post.created_at, to: DateTime.now)).perform
         user_ids << user.id
       end
     end

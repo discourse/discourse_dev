@@ -12,6 +12,8 @@ module DiscourseDev
 
     def initialize(model, count = DEFAULT_COUNT)
       Faker::Discourse.unique.clear
+      RateLimiter.disable
+
       @model = model
       @type = model.to_s
       @count = count
