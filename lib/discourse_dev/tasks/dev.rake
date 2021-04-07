@@ -4,6 +4,9 @@ def check_environment!
   if !Rails.env.development?
     raise "Database commands are only supported in development environment"
   end
+
+  ENV['SKIP_TEST_DATABASE'] = "1"
+  ENV['SKIP_MULTISITE'] = "1"
 end
 
 desc 'Run db:migrate:reset task and populate sample content for development environment'
@@ -17,7 +20,7 @@ end
 
 desc 'Initialize development environment'
 task 'dev:config' => ['db:load_config'] do |_, args|
-  DiscourseDev::Config.new.update!
+  DiscourseDev.config.update!
 end
 
 desc 'Populate sample content for development environment'
@@ -27,6 +30,7 @@ task 'dev:populate' => ['db:load_config'] do |_, args|
   Rake::Task['categories:populate'].invoke
   Rake::Task['tags:populate'].invoke
   Rake::Task['topics:populate'].invoke
+  system("redis-cli flushall")
 end
 
 desc 'Repopulate sample datas in development environment'

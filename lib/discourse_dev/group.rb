@@ -18,7 +18,8 @@ module DiscourseDev
         name: Faker::Discourse.unique.group,
         public_exit: Faker::Boolean.boolean,
         public_admission: Faker::Boolean.boolean,
-        primary_group: Faker::Boolean.boolean
+        primary_group: Faker::Boolean.boolean,
+        created_at: Faker::Time.between(from: DiscourseDev.config.start_date, to: DateTime.now),
       }
     end
 

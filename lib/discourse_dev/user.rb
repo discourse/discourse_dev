@@ -23,7 +23,8 @@ module DiscourseDev
         username: username,
         username_lower: username_lower,
         moderator: Faker::Boolean.boolean(true_ratio: 0.1),
-        trust_level: Faker::Number.between(from: 1, to: 4)
+        trust_level: Faker::Number.between(from: 1, to: 4),
+        created_at: Faker::Time.between(from: DiscourseDev.config.start_date, to: DateTime.now),
       }
     end
 

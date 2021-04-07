@@ -2,3 +2,5 @@ site_settings:
   tagging_enabled: true
   verbose_discourse_connect_logging: true
 seed: 1
+start_date: "01/01/2020"
+max_likes_count: 10
