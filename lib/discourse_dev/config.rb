@@ -7,12 +7,15 @@ module DiscourseDev
     attr_reader :config, :default_config
 
     def initialize
-      @default_config = YAML.load_file(File.join(File.expand_path(__dir__), "config.yml"))
+      default_file_path = File.join(File.expand_path(__dir__), "config.yml")
       file_path = File.join(Rails.root, "config", "dev.yml")
+      @default_config = YAML.load_file(default_file_path)
 
       if File.exists?(file_path)
         @config = YAML.load_file(file_path)
       else
+        puts "I did no detect a custom `config/dev.yml` file, creating one for you where you can amend defaults."
+        FileUtils.cp(default_file_path, file_path)
         @config = {}
       end
     end

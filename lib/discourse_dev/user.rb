@@ -10,6 +10,9 @@ module DiscourseDev
 
     def initialize(count = DEFAULT_COUNT)
       super(::User, count)
+
+      # Using the stock avatar images from https://tinyfac.es
+      # Tiny Faces is a free crowd-sourced avatar gallery
       @images = Dir[File.join(__dir__, '..', '..', 'avatars', '*.*')]
     end
 
