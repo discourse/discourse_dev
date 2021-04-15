@@ -8,3 +8,4 @@ auth_plugin_enabled: true
 allow_anonymous_to_impersonate: false
 new_user:
    username: new_user
+   email: new_user@example.com

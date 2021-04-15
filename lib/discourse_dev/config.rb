@@ -66,7 +66,7 @@ module DiscourseDev
       settings = config["new_user"]
 
       if settings.present?
-        email = settings["email"]
+        email = settings["email"] || "new_user@example.com"
 
         new_user = ::User.create!(
           email: email,
