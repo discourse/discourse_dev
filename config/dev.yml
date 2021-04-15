@@ -4,3 +4,7 @@ site_settings:
 seed: 1
 start_date: "01/01/2020"
 max_likes_count: 10
+auth_plugin_enabled: true
+allow_anonymous_to_impersonate: false
+new_user:
+   username: new_user

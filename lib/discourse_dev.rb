@@ -4,15 +4,39 @@ require 'i18n'
 
 Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file }
 
-I18n.load_path += Dir[File.join(__dir__, 'faker', 'locales', '**/*.yml')]
-I18n.reload! if I18n.backend.initialized?
-
 module DiscourseDev
   require 'discourse_dev/railtie'
   require 'discourse_dev/engine'
 
+  def self.auth_plugin_enabled?
+    config.auth_plugin_enabled
+  end
+
   def self.config
     @config ||= Config.new
+  end
+
+  def self.auth_plugin
+    return unless auth_plugin_enabled?
+
+    @auth_plugin ||= begin
+      path = File.join(root, 'auth', 'plugin.rb')
+      source = File.read(path)
+      metadata = Plugin::Metadata.parse(source)
+      Plugin::Instance.new(metadata, path)
+    end
+  end
+
+  def self.settings_file
+    File.join(root, "config", "settings.yml")
+  end
+
+  def self.client_locale_files(locale_str)
+    Dir[File.join(root, "config", "locales", "client*.#{locale_str}.yml")]
+  end
+
+  def self.root
+    File.expand_path("..", __dir__)
   end
 end
 

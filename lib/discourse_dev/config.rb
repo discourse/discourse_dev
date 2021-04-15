@@ -8,7 +8,7 @@ module DiscourseDev
     attr_reader :config, :default_config, :file_path
 
     def initialize
-      default_file_path = File.join(File.expand_path(__dir__), "config.yml")
+      default_file_path = File.join(DiscourseDev.root, "config", "dev.yml")
       @file_path = File.join(Rails.root, "config", "dev.yml")
       @default_config = YAML.load_file(default_file_path)
 
@@ -24,6 +24,7 @@ module DiscourseDev
     def update!
       update_site_settings
       create_admin_user
+      create_new_user
       set_seed
     end
 
@@ -61,6 +62,21 @@ module DiscourseDev
       end
     end
 
+    def create_new_user
+      settings = config["new_user"]
+
+      if settings.present?
+        email = settings["email"]
+
+        new_user = ::User.create!(
+          email: email,
+          username: settings["username"] || UserNameSuggester.suggest(email)
+        )
+        new_user.email_tokens.update_all confirmed: true
+        new_user.activate
+      end
+    end
+
     def set_seed
       seed = self.seed || 1
       Faker::Config.random = Random.new(seed)
@@ -72,7 +88,8 @@ module DiscourseDev
 
     def method_missing(name)
       name = name.to_s
-      config[name] || default_config[name]
+      return config[name] if config.keys.include?(name)
+      default_config[name]
     end
 
     def create_admin_user_from_settings(settings)
