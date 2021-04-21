@@ -48,7 +48,10 @@ ActiveRecord::Tasks::DatabaseTasks.module_eval do
   private
   def each_current_configuration(environment, name = nil)
     rails_each_current_configuration(environment, name) { |db_config|
-      next if environment == "development" && ENV["SKIP_TEST_DATABASE"] == "1" && db_config["database"] != "discourse_development"
+      next if environment == "development" &&
+        ENV["SKIP_TEST_DATABASE"] == "1" &&
+        db_config.configuration_hash[:database] != "discourse_development"
+
       yield db_config
     }
   end
