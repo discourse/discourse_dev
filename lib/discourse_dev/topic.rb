@@ -30,7 +30,7 @@ module DiscourseDev
 
       {
         title: title[0, SiteSetting.max_topic_title_length],
-        raw: Faker::Markdown.sandwich(sentences: 5),
+        raw: Faker::DiscourseMarkdown.sandwich(sentences: 5),
         category: @category.id,
         created_at: Faker::Time.between(from: DiscourseDev.config.start_date, to: DateTime.now),
         tags: tags,
@@ -63,7 +63,8 @@ module DiscourseDev
 
     def create!
       @category = Category.random
-      topic = data
+      user = self.user
+      topic = Faker::DiscourseMarkdown.with_user(user.id) { data }
       post = PostCreator.new(user, topic).create!
 
       if topic[:title] == "Coolest thing you have seen today"
@@ -73,6 +74,11 @@ module DiscourseDev
       end
 
       Post.new(post.topic, reply_count).populate!
+    end
+
+    def populate!
+      super
+      delete_unwanted_sidekiq_jobs
     end
 
     def user
@@ -88,6 +94,12 @@ module DiscourseDev
     def current_count
       category_definition_topic_ids = ::Category.pluck(:topic_id)
       ::Topic.where(archetype: :regular).where.not(id: category_definition_topic_ids).count
+    end
+
+    def delete_unwanted_sidekiq_jobs
+      Sidekiq::ScheduledSet.new.each do |job|
+        job.delete if job.item["class"] == "Jobs::UserEmail"
+      end
     end
   end
 end
