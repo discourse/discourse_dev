@@ -25,12 +25,12 @@ end
 
 desc 'Populate sample content for development environment'
 task 'dev:populate' => ['db:load_config'] do |_, args|
+  system("redis-cli flushall")
   Rake::Task['groups:populate'].invoke
   Rake::Task['users:populate'].invoke
   Rake::Task['categories:populate'].invoke
   Rake::Task['tags:populate'].invoke
   Rake::Task['topics:populate'].invoke
-  system("redis-cli flushall")
 end
 
 desc 'Repopulate sample datas in development environment'

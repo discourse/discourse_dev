@@ -25,7 +25,7 @@ module DiscourseDev
     def data
       {
         topic_id: topic.id,
-        raw: Faker::Markdown.sandwich(sentences: 5),
+        raw: Faker::DiscourseMarkdown.sandwich(sentences: 5),
         created_at: Faker::Time.between(from: topic.last_posted_at, to: DateTime.now),
         skip_validations: true,
         skip_guardian: true
@@ -33,6 +33,8 @@ module DiscourseDev
     end
 
     def create!
+      user = self.user
+      data = Faker::DiscourseMarkdown.with_user(user.id) { self.data }
       post = PostCreator.new(user, data).create!
       topic.reload
       generate_likes(post)
@@ -86,12 +88,15 @@ module DiscourseDev
       count.times do |i|
         @index = i
         begin
-          reply = {
-            topic_id: topic.id,
-            raw: Faker::Markdown.sandwich(sentences: 5),
-            skip_validations: true
-          }
-          PostCreator.new(User.random, reply).create!
+          user = User.random
+          reply = Faker::DiscourseMarkdown.with_user(user.id) do
+            {
+              topic_id: topic.id,
+              raw: Faker::DiscourseMarkdown.sandwich(sentences: 5),
+              skip_validations: true
+            }
+          end
+          PostCreator.new(user, reply).create!
         rescue ActiveRecord::RecordNotSaved => e
           puts e
         end
