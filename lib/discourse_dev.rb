@@ -2,7 +2,7 @@
 
 require 'i18n'
 
-Dir[File.dirname(__FILE__) + '/**/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/**/*.rb'].each { |file| require file }
 
 module DiscourseDev
   require 'discourse_dev/railtie'

@@ -39,7 +39,7 @@ module DiscourseDev
         set_random_avatar(user)
         Faker::Number.between(from: 0, to: 2).times do
           group = Group.random
-    
+
           group.add(user)
         end
       end

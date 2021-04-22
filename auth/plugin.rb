@@ -36,7 +36,7 @@ module ::OmniAuth
           data = request.params.slice(*FIELDS)
 
           r = Rack::Response.new
-          r.set_cookie(COOKIE, {value: data.to_json, path: "/", expires: 1.month.from_now})
+          r.set_cookie(COOKIE, { value: data.to_json, path: "/", expires: 1.month.from_now })
 
           uri = URI.parse(callback_path)
           uri.query = URI.encode_www_form(data)
@@ -61,7 +61,7 @@ module ::OmniAuth
         defaults["uid"] = SecureRandom.hex(8) unless defaults["uid"].present?
         defaults["email_verified"] = "true" unless defaults["email_verified"].present?
 
-        OmniAuth::Form.build(:title => "Fake Authentication Provider") do
+        OmniAuth::Form.build(title: "Fake Authentication Provider") do
           html "\n<input type='hidden' name='authenticity_token' value='#{token}'/>"
 
           FIELDS.each do |f|
@@ -128,7 +128,6 @@ end
 
 auth_provider authenticator: DevelopmentAuthenticator.new
 
-
 ### DiscourseConnect
 after_initialize do
   module ::DevelopmentAuth
@@ -191,7 +190,7 @@ after_initialize do
       append_view_path(File.expand_path("../app/views", __FILE__))
       render template: "fake_discourse_connect/form", layout: false
     end
-  end 
+  end
 
   DevelopmentAuth::Engine.routes.draw do
     get "/fake-discourse-connect" => "fake_discourse_connect#auth"

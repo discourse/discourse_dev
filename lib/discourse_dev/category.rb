@@ -36,7 +36,7 @@ module DiscourseDev
     def permissions
       return @permissions if @permissions.present?
       return { everyone: :full } if Faker::Boolean.boolean(true_ratio: 0.75)
-        
+
       permission = {}
       group = Group.random
       permission[group.id] = Faker::Number.between(from: 1, to: 3)
