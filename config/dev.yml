@@ -2,7 +2,7 @@ site_settings:
   tagging_enabled: true
   verbose_discourse_connect_logging: true
 seed: 1
-start_date: "01/01/2020"
+start_date: 2020-01-01
 max_likes_count: 10
 auth_plugin_enabled: true
 allow_anonymous_to_impersonate: false

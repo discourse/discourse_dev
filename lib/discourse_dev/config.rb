@@ -5,20 +5,22 @@ require 'highline/import'
 
 module DiscourseDev
   class Config
-    attr_reader :config, :default_config, :file_path
+    attr_reader :config, :file_path
 
     def initialize
       default_file_path = File.join(DiscourseDev.root, "config", "dev.yml")
       @file_path = File.join(Rails.root, "config", "dev.yml")
-      @default_config = YAML.load_file(default_file_path)
+      default_config = YAML.load_file(default_file_path)
 
       if File.exists?(file_path)
-        @config = YAML.load_file(file_path)
+        user_config = YAML.load_file(file_path)
       else
         puts "I did no detect a custom `config/dev.yml` file, creating one for you where you can amend defaults."
         FileUtils.cp(default_file_path, file_path)
-        @config = {}
+        user_config = {}
       end
+
+      @config = default_config.deep_merge(user_config).deep_symbolize_keys
     end
 
     def update!
@@ -28,21 +30,14 @@ module DiscourseDev
       set_seed
     end
 
+    private
+
     def update_site_settings
       puts "Updating site settings..."
 
-      site_settings = config["site_settings"] || {}
+      site_settings = config[:site_settings] || {}
 
       site_settings.each do |key, value|
-        puts "#{key} = #{value}"
-        SiteSetting.set(key, value)
-      end
-
-      keys = site_settings.keys
-
-      default_config["site_settings"].each do |key, value|
-        next if keys.include?(key)
-
         puts "#{key} = #{value}"
         SiteSetting.set(key, value)
       end
@@ -53,7 +48,7 @@ module DiscourseDev
     def create_admin_user
       puts "Creating default admin user account..."
 
-      settings = config["admin"]
+      settings = config[:admin]
 
       if settings.present?
         create_admin_user_from_settings(settings)
@@ -63,14 +58,14 @@ module DiscourseDev
     end
 
     def create_new_user
-      settings = config["new_user"]
+      settings = config[:new_user]
 
       if settings.present?
-        email = settings["email"] || "new_user@example.com"
+        email = settings[:email] || "new_user@example.com"
 
         new_user = ::User.create!(
           email: email,
-          username: settings["username"] || UserNameSuggester.suggest(email)
+          username: settings[:username] || UserNameSuggester.suggest(email)
         )
         new_user.email_tokens.update_all confirmed: true
         new_user.activate
@@ -83,22 +78,20 @@ module DiscourseDev
     end
 
     def start_date
-      DateTime.parse(config["start_date"] || default_config["start_date"])
+      DateTime.parse(config[:start_date])
     end
 
     def method_missing(name)
-      name = name.to_s
-      return config[name] if config.keys.include?(name)
-      default_config[name]
+      config[name.to_sym]
     end
 
     def create_admin_user_from_settings(settings)
-      email = settings["email"]
+      email = settings[:email]
 
       admin = ::User.create!(
         email: email,
-        username: settings["username"] || UserNameSuggester.suggest(email),
-        password: settings["password"]
+        username: settings[:username] || UserNameSuggester.suggest(email),
+        password: settings[:password]
       )
       admin.grant_admin!
       if admin.trust_level < 1
