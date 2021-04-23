@@ -7,8 +7,8 @@ require 'faker'
 module DiscourseDev
   class Tag < Record
 
-    def initialize(count = DEFAULT_COUNT)
-      super(::Tag, count)
+    def initialize
+      super(::Tag, DiscourseDev.config.tag[:count])
     end
 
     def data

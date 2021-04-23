@@ -7,8 +7,8 @@ require 'faker'
 module DiscourseDev
   class Category < Record
 
-    def initialize(count = DEFAULT_COUNT)
-      super(::Category, count)
+    def initialize
+      super(::Category, DiscourseDev.config.category[:count])
       @parent_category_ids = ::Category.where(parent_category_id: nil).pluck(:id)
     end
 
