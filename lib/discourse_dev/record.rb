@@ -11,8 +11,11 @@ module DiscourseDev
     attr_reader :model, :type
 
     def initialize(model, count = DEFAULT_COUNT)
-      Faker::Discourse.unique.clear
-      RateLimiter.disable
+      @@initialized ||= begin
+        Faker::Discourse.unique.clear
+        RateLimiter.disable
+        true
+      end
 
       @model = model
       @type = model.to_s
