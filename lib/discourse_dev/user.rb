@@ -8,8 +8,8 @@ module DiscourseDev
   class User < Record
     attr_reader :images
 
-    def initialize(count = DEFAULT_COUNT)
-      super(::User, count)
+    def initialize
+      super(::User, DiscourseDev.config.user[:count])
 
       # Using the stock avatar images from https://tinyfac.es
       # Tiny Faces is a free crowd-sourced avatar gallery
@@ -18,7 +18,7 @@ module DiscourseDev
 
     def data
       name = Faker::Name.unique.name
-      email = Faker::Internet.unique.email(name: name)
+      email = Faker::Internet.unique.email(name: name, domain: "faker.invalid")
       username = Faker::Internet.unique.username(specifier: ::User.username_length)
       username = UserNameSuggester.suggest(username)
       username_lower = ::User.normalize_username(username)

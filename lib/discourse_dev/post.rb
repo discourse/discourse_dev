@@ -8,12 +8,12 @@ module DiscourseDev
 
     attr_reader :topic
 
-    def initialize(topic, count = DEFAULT_COUNT)
+    def initialize(topic, count)
       super(::Post, count)
       @topic = topic
 
       category = topic.category
-      @max_likes_count = DiscourseDev.config.max_likes_count
+      @max_likes_count = DiscourseDev.config.post[:max_likes_count]
       unless category.groups.blank?
         group_ids = category.groups.pluck(:id)
         @user_ids = ::GroupUser.where(group_id: group_ids).pluck(:user_id)

@@ -6,8 +6,9 @@ require 'faker'
 module DiscourseDev
   class Topic < Record
 
-    def initialize(count = DEFAULT_COUNT)
-      super(::Topic, count)
+    def initialize
+      @settings = DiscourseDev.config.topic
+      super(::Topic, @settings[:count])
     end
 
     def data
@@ -47,14 +48,14 @@ module DiscourseDev
       if index < I18n.t("faker.discourse.topics").count
         Faker::Discourse.unique.topic
       else
-        Faker::Lorem.unique.sentence(word_count: 3, supplemental: true, random_words_to_add: 4).chomp(".")
+        Faker::Lorem.unique.sentence(word_count: 5, supplemental: true, random_words_to_add: 4).chomp(".")
       end
     end
 
     def tags
       @tags = []
 
-      Faker::Number.between(from: 0, to: 3).times do
+      Faker::Number.between(from: @settings.dig(:tags, :min), to: @settings.dig(:tags, :max)).times do
         @tags << Faker::Discourse.tag
       end
 
@@ -67,10 +68,10 @@ module DiscourseDev
       topic = Faker::DiscourseMarkdown.with_user(user.id) { data }
       post = PostCreator.new(user, topic).create!
 
-      if topic[:title] == "Coolest thing you have seen today"
-        reply_count = 99
+      if override = @settings.dig(:replies, :overrides).find { |o| o[:title] == topic[:title] }
+        reply_count = override[:count]
       else
-        reply_count = Faker::Number.between(from: 0, to: 12)
+        reply_count = Faker::Number.between(from: @settings.dig(:replies, :min), to: @settings.dig(:replies, :max))
       end
 
       Post.new(post.topic, reply_count).populate!

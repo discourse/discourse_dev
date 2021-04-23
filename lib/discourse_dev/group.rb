@@ -7,10 +7,8 @@ require 'faker'
 module DiscourseDev
   class Group < Record
 
-    DEFAULT_COUNT = 15.freeze
-
-    def initialize(count = DEFAULT_COUNT)
-      super(::Group, count)
+    def initialize
+      super(::Group, DiscourseDev.config.group[:count])
     end
 
     def data
