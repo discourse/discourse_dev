@@ -44,7 +44,7 @@ module DiscourseDev
     end
 
     def title
-      if index <= I18n.t("faker.discourse.topics").count
+      if index < I18n.t("faker.discourse.topics").count
         Faker::Discourse.unique.topic
       else
         Faker::Lorem.unique.sentence(word_count: 3, supplemental: true, random_words_to_add: 4).chomp(".")
