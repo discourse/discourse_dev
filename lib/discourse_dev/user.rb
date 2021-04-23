@@ -19,8 +19,9 @@ module DiscourseDev
     def data
       name = Faker::Name.unique.name
       email = Faker::Internet.unique.email(name: name)
-      username = Faker::Internet.unique.username(specifier: name)[0, SiteSetting.max_username_length]
-      username_lower = username.downcase
+      username = Faker::Internet.unique.username(specifier: ::User.username_length)
+      username = UserNameSuggester.suggest(username)
+      username_lower = ::User.normalize_username(username)
 
       {
         name: name,
