@@ -27,11 +27,11 @@ The `rake dev:reset` command will just invoke other rake tasks in the above orde
 
 Reloads the site settings from the dev.yml file.
 
-### `dev:populate`
+#### `dev:populate`
 
 Runs all of the sub-populate tasks.
 
-### populate
+### `*:populate`
 
 Populates the specified groups of records based on settings in dev.yml.
 
