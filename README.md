@@ -31,7 +31,7 @@ Reloads the site settings from the dev.yml file.
 
 Runs all of the sub-populate tasks.
 
-### `*:populate`
+#### `*:populate`
 
 Populates the specified groups of records based on settings in dev.yml.
 
