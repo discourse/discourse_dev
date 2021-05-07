@@ -11,6 +11,13 @@ module DiscourseDev
       super(::Tag, DiscourseDev.config.tag[:count])
     end
 
+    def create!
+      super
+    rescue ActiveRecord::RecordInvalid => e
+      # If the name is taken, try again
+      retry
+    end
+
     def populate!
       return unless SiteSetting.tagging_enabled
       super
