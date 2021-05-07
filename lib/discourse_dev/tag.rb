@@ -18,6 +18,11 @@ module DiscourseDev
       retry
     end
 
+    def populate!
+      return unless SiteSetting.tagging_enabled
+      super
+    end
+
     def data
       {
         name: Faker::Discourse.unique.tag,
