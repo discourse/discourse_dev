@@ -20,7 +20,6 @@ module DiscourseDev
       @model = model
       @type = model.to_s
       @count = count
-      @index = nil
     end
 
     def create!
@@ -30,7 +29,7 @@ module DiscourseDev
 
     def populate!
       if current_count >= @count
-        puts "Already have #{@count}+ #{type.downcase} records."
+        puts "Already have #{current_count} #{type.downcase} records"
 
         Rake.application.top_level_tasks.each do |task_name|
           Rake::Task[task_name].reenable
@@ -38,21 +37,19 @@ module DiscourseDev
 
         Rake::Task['dev:repopulate'].invoke
         return
+      elsif current_count > 0
+        @count -= current_count
+        puts "There are #{current_count} #{type.downcase} records. Creating #{@count} more."
+      else
+        puts "Creating #{@count} sample #{type.downcase} records"
       end
 
-      puts "Creating #{@count} sample #{type.downcase} records"
-
-      @count.times do |i|
-        @index = i
+      @count.times do
         create!
         putc "."
       end
 
       puts
-    end
-
-    def index
-      @index
     end
 
     def current_count
