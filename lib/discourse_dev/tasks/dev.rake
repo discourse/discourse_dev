@@ -42,6 +42,6 @@ task 'dev:repopulate' => ['db:load_config'] do |_, args|
   if (answer == "" || answer.downcase == 'y')
     Rake::Task['dev:reset'].invoke
   else
-    puts "You can run `dev:reset` rake task to do this repopulate action anytime."
+    puts "You can run `bin/rails dev:reset` to repopulate anytime."
   end
 end

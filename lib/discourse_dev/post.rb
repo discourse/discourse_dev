@@ -63,8 +63,7 @@ module DiscourseDev
     def populate!
       generate_likes(topic.first_post)
 
-      @count.times do |i|
-        @index = i
+      @count.times do
         create!
       end
     end
@@ -86,7 +85,6 @@ module DiscourseDev
       puts "Creating #{count} replies in '#{topic.title}'"
 
       count.times do |i|
-        @index = i
         begin
           user = User.random
           reply = Faker::DiscourseMarkdown.with_user(user.id) do
