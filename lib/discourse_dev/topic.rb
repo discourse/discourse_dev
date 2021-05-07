@@ -53,6 +53,8 @@ module DiscourseDev
     end
 
     def tags
+      return unless SiteSetting.tagging_enabled
+
       @tags = []
 
       Faker::Number.between(from: @settings.dig(:tags, :min), to: @settings.dig(:tags, :max)).times do

@@ -11,6 +11,11 @@ module DiscourseDev
       super(::Tag, DiscourseDev.config.tag[:count])
     end
 
+    def populate!
+      return unless SiteSetting.tagging_enabled
+      super
+    end
+
     def data
       {
         name: Faker::Discourse.unique.tag,
